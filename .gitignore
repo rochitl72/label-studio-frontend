@@ -1,0 +1,28 @@
+# This repo is deployed WITHOUT Docker (nginx serves the committed build/
+# directly) -- these files are leftovers from the combined dev repo's Docker
+# setup and are deliberately not tracked here. nginx/rbg-annotation-studio.conf
+# replaces nginx.conf's role.
+Dockerfile
+.dockerignore
+nginx.conf
+vite.config.js.timestamp-*.mjs
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Secrets / local config
+.env
+*.env
+!.env.example
+
+# Node / build tooling
+node_modules/
+.vite/
+npm-debug.log*
+
+# build/ is deliberately NOT ignored -- it's the committed, deployable
+# output the org's deploy.yml expects to find and rsync.

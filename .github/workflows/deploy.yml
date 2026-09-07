@@ -1,0 +1,39 @@
+# .github/workflows/deploy.yml
+name: Deploy Frontend Services
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Copy files to server directory
+        shell: bash
+        run: |
+          set -e
+
+          # CHANGE ME — confirm this with the deployment team before first
+          # use. /var/www/ alone is what the org's other frontend
+          # (tcga-frontend) already uses; reusing it here would overwrite
+          # that app's files. Give this app its own subdirectory (or its own
+          # nginx server root entirely) and make sure nginx's `root` in
+          # nginx/rbg-annotation-studio.conf points at the SAME path.
+          TARGET="/var/www/rbg-annotation-studio/"
+          echo "Ensuring target directory exists..."
+          sudo mkdir -p "$TARGET"
+
+          if [ ! -d "build" ]; then
+            echo "â build folder missing"
+            exit 1
+          fi
+
+          echo "Syncing build folder contents..."
+          sudo rsync -av build/ "$TARGET"
+
+          echo "Deployment completed successfully."
